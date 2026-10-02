@@ -1,0 +1,20 @@
+/*
+ * Each variant marks its key path with .flow. It is dashed at rest and
+ * only moves while the enclosing project (.group) is hovered or focused.
+ */
+.flow {
+  stroke-dasharray: 8 6;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global(.group):hover .flow,
+  :global(.group):focus-within .flow {
+    animation: flow 1.4s linear infinite;
+  }
+}
+
+@keyframes flow {
+  to {
+    stroke-dashoffset: -28;
+  }
+}

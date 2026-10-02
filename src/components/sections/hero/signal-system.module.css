@@ -1,0 +1,74 @@
+/*
+ * Motion for the hero signal diagram. Everything lives behind
+ * prefers-reduced-motion: no-preference — the default render is the
+ * complete, static diagram.
+ */
+
+.signal,
+.pulse {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mesh {
+    animation: fade-in 1.2s ease-out both;
+  }
+
+  /* Active routes draw in once (paths use pathLength="1"). */
+  .route {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: draw 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: var(--delay);
+  }
+
+  /* A short dash travels each route, then rests before the next pass. */
+  .signal {
+    display: inline;
+    stroke-dasharray: 0.06 2;
+    stroke-dashoffset: 0.06;
+    animation: travel 7s linear infinite;
+    animation-delay: var(--delay);
+  }
+
+  .pulse {
+    display: inline;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pulse 3.5s ease-out infinite 1.6s;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes travel {
+  0% {
+    stroke-dashoffset: 0.06;
+  }
+  55%,
+  100% {
+    stroke-dashoffset: -1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  60%,
+  100% {
+    opacity: 0;
+    transform: scale(2.6);
+  }
+}
