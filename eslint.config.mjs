@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored ThreeUI KageLandingPage files, kept byte-exact (see
+    // src/shaders/threeui-kage.manifest.json); they are not ours to reformat.
+    "src/shaders/**",
+    "public/landing-pages/**",
   ]),
 ]);
 

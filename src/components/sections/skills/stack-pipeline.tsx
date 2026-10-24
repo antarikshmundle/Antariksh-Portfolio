@@ -29,17 +29,17 @@ export function StackPipeline() {
                 <span className="type-label w-8 shrink-0 text-muted-foreground">
                   {feeds.map((group) => group.number).join(" ")}
                 </span>
-                <span className="h-px w-5 shrink-0 bg-border/40" />
+                <span className="h-px w-5 shrink-0 bg-border/30" />
                 <span
                   className={cn(
                     "flex flex-1 items-center justify-between gap-3 border px-4 py-3",
-                    last ? "border-foreground bg-foreground text-background" : "border-border bg-background",
+                    last ? "border-accent bg-accent text-accent-foreground" : "border-border/30 bg-background",
                   )}
                 >
                   <span className="font-display text-base font-medium tracking-[-0.01em] md:text-lg">
                     {stage.label}
                   </span>
-                  <span className={cn("size-2", last ? "bg-accent" : "border border-current/50")} />
+                  <span className={cn("size-2", last ? "bg-accent-foreground" : "border border-current/50")} />
                 </span>
               </div>
               {!last && (
@@ -57,7 +57,7 @@ export function StackPipeline() {
           <span className="type-label text-muted-foreground">
             {spanning.map((group) => group.number).join(" ")}
           </span>
-          <span className="mt-2 w-2.5 flex-1 border-y border-r border-border/60" />
+          <span className="mt-2 w-2.5 flex-1 border-y border-r border-border/40" />
         </div>
       )}
     </div>

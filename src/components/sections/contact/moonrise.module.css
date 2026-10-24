@@ -1,0 +1,15 @@
+/* Small closing echo of the hero: the red moon rising behind a ridge. */
+.moon {
+  position: absolute;
+  left: 50%;
+  bottom: 16%;
+  width: 50%;
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 62% 58%, rgba(60, 10, 6, 0.16), transparent 12%),
+    radial-gradient(ellipse 22% 16% at 44% 34%, rgba(60, 10, 6, 0.12), transparent 100%),
+    radial-gradient(circle at 38% 36%, #d4513b 0%, #b8321f 36%, #8c1d15 68%, #4f0e0a 100%);
+  box-shadow: 0 0 3rem 0.25rem rgba(179, 38, 30, 0.2);
+}

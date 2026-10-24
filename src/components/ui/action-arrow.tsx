@@ -18,7 +18,7 @@ export function ActionArrow({ direction = "up-right", className }: ActionArrowPr
     <span
       aria-hidden
       className={cn(
-        "inline-flex size-10 shrink-0 items-center justify-center border border-border transition-colors duration-200 group-hover:bg-foreground group-hover:text-background group-focus-visible:bg-foreground group-focus-visible:text-background",
+        "inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-border/40 transition-colors duration-200 group-hover:border-accent group-hover:bg-accent group-hover:text-accent-foreground group-focus-visible:border-accent group-focus-visible:bg-accent group-focus-visible:text-accent-foreground",
         className,
       )}
     >

@@ -1,4 +1,4 @@
-export type ProjectVisualType = "campus" | "field" | "inference" | "records" | "sensor";
+export type ProjectVisualType = "campus" | "inference" | "records" | "sensor";
 export type ProjectVisualTone = "surface" | "inverse" | "outline";
 
 export type ProjectSystemNode = { name: string; role: string };
@@ -17,10 +17,27 @@ export type ProjectBuildNote = {
   steps?: { label: string; items: string[] };
 };
 
+/**
+ * A documented result — a count, a recorded metric or a QA outcome.
+ * Only values that appear in the project's own repository or docs.
+ */
+export type ProjectResult = {
+  value: string;
+  label: string;
+  /** Context that keeps the number honest (dataset, split, caveat). */
+  detail?: string;
+};
+
 export type Project = {
   slug: string;
   number: string;
   title: string;
+  /** Featured projects get the large case-study treatment on the homepage. */
+  featured?: boolean;
+  /** One-line positioning used on featured cards, e.g. "Grounded campus search". */
+  kicker?: string;
+  /** Another name the same project is documented or branded under. */
+  alsoKnownAs?: string;
   /** One or two factual sentences. No unverified metrics or outcomes. */
   summary: string;
   category: string;
@@ -48,6 +65,9 @@ export type Project = {
   /** Real constraints and trade-offs, rendered as their own chapter. */
   challenges?: string[];
   outcome?: string;
+  results?: ProjectResult[];
+  /** Where the results come from, shown under them. */
+  resultsSource?: string;
   future?: string;
   roadmap?: string[];
   /** Verified repository URL — the "View source" link appears only when set. */
@@ -61,13 +81,18 @@ export const projects: Project[] = [
     slug: "pce-campus-navigator",
     number: "01",
     title: "PCE Campus Navigator",
+    featured: true,
+    kicker: "Grounded campus search and navigation",
     summary:
       "Navigation for the PCE campus, built to help students and visitors find the right place, estimate the distance, and hand off to Google Maps for walking directions.",
     category: "Campus navigation",
     tags: ["Navigation", "Campus"],
     visual: { type: "campus", tone: "surface" },
     technologies: ["React", "Vite", "Tailwind CSS", "FastAPI", "PostgreSQL", "Google Maps", "OpenStreetMap"],
-    liveUrl: "https://pce-campus-navigator-rdzl1c0rr-antariksh-s-team.vercel.app/",
+    // The production URL listed on the repository. (The previous link pointed
+    // at a protected preview deployment that redirected to a Vercel login.)
+    liveUrl: "https://pce-campus-navigator.vercel.app/",
+    github: "https://github.com/antarikshmundle/pce-campus-navigator",
 
     overview:
       "PCE Campus Navigator started with a simple problem: a campus map can show where a place is, but it can't help someone who doesn't know what that place is officially called. I built a map-first web app around a single directory of 69 canonical places on the Priyadarshini College of Engineering campus, then layered on ranked, typo-tolerant search, a Campus AI that answers only from stored records, Nearby discovery for the area around the college, and an admin area for keeping the directory accurate.",
@@ -164,6 +189,13 @@ export const projects: Project[] = [
     ],
     outcome:
       "The documented feature set is complete, from search and the Campus AI through Nearby and the admin area. The project went through a documented Stage 13 QA pass covering API and security checks, browser flows, error states, responsive layouts and reduced-motion behaviour, and the documentation records Stage 13's final status as PASS.",
+    results: [
+      { value: "69", label: "Canonical campus places", detail: "One directory that search, the Campus AI and the map all resolve to." },
+      { value: "8", label: "Search match tiers", detail: "From exact name down to description, with length-aware typo tolerance." },
+      { value: "105", label: "Nearby places outside the directory", detail: "71 around PCE and 34 across Nagpur, from OpenStreetMap." },
+      { value: "PASS", label: "Stage 13 QA", detail: "API, security, browser flows, error states, responsive and reduced-motion checks." },
+    ],
+    resultsSource: "Figures from the project's README and Stage 13 QA documentation.",
     future: "The next steps remove the current constraints and harden what is already there.",
     roadmap: [
       "Enable the Google Routes API, with quotas, to switch on in-app navigation",
@@ -176,29 +208,142 @@ export const projects: Project[] = [
       "An optional LLM layer that only rephrases answers, keeping the deterministic data and action core",
     ],
   },
-  {
-    slug: "agriverse",
-    number: "02",
-    title: "AgriVerse",
-    summary:
-      "An agriculture-focused project that brings farm and crop information together in one digital space.",
-    category: "Agriculture",
-    tags: ["Agriculture"],
-    visual: { type: "field", tone: "inverse" },
-  },
+  /*
+   * Everything below is taken from the agriverse-crop-ai-analyzer repository:
+   * backend/README.md, frontend/README.md and the *_metadata.json files that
+   * ship beside each trained model in backend/ml_artifacts/.
+   */
   {
     slug: "crop-ai-analyzer",
-    number: "03",
+    number: "02",
     title: "Crop AI Analyzer",
-    summary: "Applies AI to crop analysis, turning model output into insight that is clear and usable.",
+    // One product: the repository, READMEs and app shell brand it AgriVerse;
+    // the deployed app's page title is "CROP AI Analyzer". /projects/agriverse
+    // redirects here (next.config.ts).
+    alsoKnownAs: "AgriVerse",
+    featured: true,
+    kicker: "Three trained models, one honest advisory",
+    summary:
+      "A farm decision-support platform that combines three trained models — crop recommendation, plant-disease detection and yield prediction — with live weather and market data, and says plainly when evidence is missing.",
     category: "Applied AI",
-    tags: ["AI", "Agriculture", "Analysis"],
+    tags: ["Machine learning", "Computer vision", "Agriculture"],
     visual: { type: "inference", tone: "outline" },
+    technologies: [
+      "React",
+      "Vite",
+      "Tailwind CSS",
+      "Recharts",
+      "FastAPI",
+      "PostgreSQL",
+      "SQLAlchemy",
+      "scikit-learn",
+      "TensorFlow / Keras",
+      "Open-Meteo",
+      "data.gov.in Agmarknet",
+      "ReportLab",
+      "pytest",
+    ],
     liveUrl: "https://agriverse-crop-ai-analyzer.vercel.app/",
+    github: "https://github.com/antarikshmundle/agriverse-crop-ai-analyzer",
+
+    overview:
+      "Crop AI Analyzer is the agricultural decision-support platform documented in its repository as AgriVerse / CROP AI Analyzer. A React frontend sits on a FastAPI and PostgreSQL backend that serves three trained models — a crop recommender, a plant-disease image classifier and a yield regressor — alongside live weather and mandi-price lookups. Their outputs feed an explainable advisory, with financial, risk and report modules built on the same persisted records.",
+    problem:
+      "The decisions a farm faces — what to plant, whether a leaf is diseased, what a season might yield — depend on evidence spread across soil readings, leaf images, historical production data, weather and market prices. A tool that blends that evidence into one recommendation is only useful if it is clear about which evidence it actually has, and never fills the gaps with numbers that look real.",
+    approach:
+      "Each model is trained offline, committed as an artifact with a metadata file that records its dataset, split and test metrics, and loaded by its own service in the API. A missing or corrupt artifact returns an explicit 503 rather than a silent fallback. The advisory engine combines a farm's latest persisted crop and yield results with live Open-Meteo weather and Agmarknet market data, and reports missing evidence through a data-completeness field instead of substituting it. Disease results are shown separately as farm-health context and never mixed into crop scoring. Financial, risk and credit-readiness calculations are deterministic rules, and the project documents them as rules, not as machine learning.",
+
+    architecture:
+      "A React and Vite single-page app talks to a FastAPI REST API backed by PostgreSQL. Every farm route is protected by JWT authentication and scoped to the farm's owner. Model artifacts load inside the API; weather and market data come from live external providers.",
+    system: {
+      layers: [
+        { name: "Browser", role: "Dashboard, analysis workspace and one page per module" },
+        { name: "React / Vite SPA", role: "Weather, market, credit readiness, schemes, crop comparison, alerts, history, reports" },
+        { name: "FastAPI REST API", role: "JWT auth, farm-scoped ownership, advisory engine, PDF reports" },
+        { name: "PostgreSQL", role: "Users, farms, analyses and reports" },
+      ],
+      aside: {
+        label: "Inside and beside the API",
+        note: "Models load from committed artifacts; providers are called live.",
+        items: [
+          { name: "Crop model", role: "RandomForestClassifier · scikit-learn" },
+          { name: "Disease model", role: "MobileNetV2 transfer learning · Keras" },
+          { name: "Yield model", role: "RandomForestRegressor with prediction intervals" },
+          { name: "Open-Meteo", role: "Weather at the farm's stored coordinates" },
+          { name: "data.gov.in Agmarknet", role: "Mandi prices, with retry and key redaction" },
+        ],
+      },
+    },
+    features: [
+      "Crop recommendation from soil nutrients (N, P, K), pH, temperature, humidity and rainfall",
+      "Plant-disease detection from a leaf photo across 38 PlantVillage classes",
+      "Yield prediction by state, district, crop, season, year and area, with a 10th–90th percentile range",
+      "Explainable advisory that combines model outputs with live weather and market data",
+      "Credit readiness and EMI, financial and risk analysis as documented rule-based calculations",
+      "Scheme recommendations, crop comparison and alerts",
+      "Analysis history and PDF reports generated from persisted records",
+      "JWT authentication with farm-scoped ownership on every farm route",
+    ],
+
+    buildNotes: [
+      {
+        title: "Crop recommendation",
+        paragraphs: [
+          "A 200-tree RandomForest trained on the Kaggle Crop Recommendation dataset: 2,200 rows, 22 crops and seven features, with an 80/20 stratified split and 5-fold cross-validation.",
+          "It replaced an earlier DecisionTree. Inspection found that every one of that tree's 38 leaves held exactly one training sample, so it returned degenerate 100% / 0% probabilities on almost any input. On the same held-out split the RandomForest scored a macro-F1 of 0.9955 against the tree's 0.9794, with confidence spread across classes instead of always certain.",
+        ],
+        steps: {
+          label: "Inputs",
+          items: ["Nitrogen", "Phosphorus", "Potassium", "Temperature", "Humidity", "pH", "Rainfall"],
+        },
+      },
+      {
+        title: "Disease detection",
+        paragraphs: [
+          "MobileNetV2 transfer learning on the full PlantVillage colour set: 54,305 leaf images across 38 classes. The ImageNet base stays frozen; features are cached once and only the dense head is trained, then the two are reassembled into one inference model at 224 × 224 input.",
+          "The split is leaf-group-aware for 30 of the 38 classes, so photos of the same leaf can't land on both sides. An earlier run passed the test set in as validation data, letting it influence early stopping. That was corrected: validation is now carved from training data only, and the 10,849-image test set was used exactly once, after the model was fixed.",
+        ],
+        steps: {
+          label: "Pipeline",
+          items: ["Leaf-group split", "Frozen MobileNetV2 features", "Train dense head", "Reassemble", "Single test pass"],
+        },
+      },
+      {
+        title: "Yield prediction",
+        paragraphs: [
+          "A RandomForestRegressor trained on India's crop production records: 326,999 rows after cleaning from 345,407, covering 36 states, 728 districts and 52 crops. The split is chronological — 1997–2014 for training, 2015–2017 for validation and 2018–2020 for test — so the model is judged on years it has never seen.",
+          "Production is deliberately excluded as a feature because yield is derived from it. Each prediction carries an interval from the 10th to the 90th percentile of the individual trees' predictions.",
+        ],
+      },
+      {
+        title: "Evidence-grounded advisory",
+        paragraphs: [
+          "The advisory reads only real inputs: persisted model outputs, the farm's records and live provider responses. Weather comes from Open-Meteo at the farm's coordinates; a mock exists only as an explicit local-development opt-in. Market prices come from data.gov.in's Agmarknet with retry and back-off, and the API key is redacted from errors and logs.",
+          "When a provider fails, the user sees an honest error rather than a fabricated price, and the advisory marks the gap in its data-completeness field.",
+        ],
+      },
+    ],
+
+    challenges: [
+      "Yield R² on the test years is low (0.072) and the project reports it rather than hiding it. 13.4% of test crop-and-district combinations never appear in training, so MAE is the more meaningful measure.",
+      "The yield dataset has no weather, soil or fertiliser fields. The API still accepts rainfall, temperature and fertiliser for compatibility, but they have no effect on the prediction.",
+      "Uploaded leaf images are used once for inference and then discarded; there is no object-storage integration.",
+      "Market data needs a data.gov.in API key and has no mock provider, so an outage surfaces as an error.",
+      "Tables are created with create_all() and there is no migration tooling — workable because every schema change so far has been additive.",
+    ],
+    outcome:
+      "All three models ship with the repository as trained artifacts, each beside a metadata file recording its dataset, split and test metrics, so the app runs without a training step. The backend includes pytest modules for authentication, farms, each model, weather, market, schemes, alerts, history and reports.",
+    results: [
+      { value: "95.8%", label: "Disease model test accuracy", detail: "MobileNetV2 · 38 classes · 10,849 held-out images · macro-F1 0.949" },
+      { value: "0.9955", label: "Crop model held-out macro-F1", detail: "RandomForest · 22 crops · vs 0.9794 for the DecisionTree it replaced" },
+      { value: "1.82", label: "Yield model test MAE, t/ha", detail: "Chronological split · tested on 2018–2020 · R² 0.072, reported with its diagnosis" },
+      { value: "3", label: "Trained models in the API", detail: "Each fails with an explicit 503, never a silent fallback" },
+    ],
+    resultsSource: "Test metrics as recorded in the repository's model metadata files.",
   },
   {
     slug: "gym-management-system",
-    number: "04",
+    number: "03",
     title: "Gym Management System",
     summary:
       "A management system for running a gym, keeping members and day-to-day records organised in one place.",
@@ -208,7 +353,7 @@ export const projects: Project[] = [
   },
   {
     slug: "iot-environmental-monitoring-system",
-    number: "05",
+    number: "04",
     title: "IoT Environmental Monitoring System",
     summary: "An IoT system for monitoring environmental conditions, reading sensor data from connected hardware.",
     category: "IoT",

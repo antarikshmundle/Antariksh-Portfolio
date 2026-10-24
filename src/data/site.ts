@@ -3,7 +3,9 @@ export const siteConfig = {
   title: "Antariksh Mundle — Portfolio",
   role: "AI & Data Science Engineer",
   description:
-    "Building intelligent systems that turn complex problems into useful products.",
+    "AI & Data Science engineering student in Nagpur, building machine-learning systems, full-stack products and IoT projects — from trained model to the software around it.",
+  /** Production URL, as listed on the repository. Used for absolute metadata URLs. */
+  url: "https://antariksh-portfolio-six.vercel.app",
   location: "Nagpur / India",
   coordinates: "21.15° N · 79.09° E",
 } as const;
@@ -27,16 +29,24 @@ export const profile = {
  */
 export const routes = {
   home: "/",
+  top: "/#top",
   work: "/#work",
+  /** The full About page. The homepage section is aboutSection. */
   about: "/about",
+  aboutSection: "/#about",
+  skills: "/#skills",
   journey: "/#journey",
+  achievements: "/#recognition",
   contact: "/#contact",
 } as const;
 
-/** Primary navigation, shared by the header and footer. */
+/** Primary navigation, shared by the header and footer, in page order. */
 export const navigation = [
-  { label: "Work", href: routes.work },
-  { label: "About", href: routes.about },
-  { label: "Journey", href: routes.journey },
+  { label: "Home", href: routes.top },
+  { label: "About", href: routes.aboutSection },
+  { label: "Projects", href: routes.work },
+  { label: "Skills", href: routes.skills },
+  { label: "Experience", href: routes.journey },
+  { label: "Achievements", href: routes.achievements },
   { label: "Contact", href: routes.contact },
 ] as const;

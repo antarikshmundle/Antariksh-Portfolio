@@ -2,9 +2,9 @@ import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { Grid } from "@/components/layout/grid";
 import { Section } from "@/components/layout/section";
+import { SectionHeading } from "@/components/layout/section-heading";
 import { Reveal } from "@/components/motion/reveal";
 import { ButtonLink } from "@/components/ui/button";
-import { Divider } from "@/components/ui/divider";
 import { Frame } from "@/components/ui/frame";
 import { MetaRow } from "@/components/ui/meta-row";
 import { TechLabel } from "@/components/ui/tech-label";
@@ -21,23 +21,24 @@ const profileFacts = [
 
 export function AboutSection() {
   return (
-    <Section id="about" aria-labelledby="about-title" className="scroll-mt-4">
+    <Section id="about" aria-labelledby="about-title" className="bg-surface">
       <Container>
-        <Divider
-          weight="strong"
-          label={<TechLabel index="03">About</TechLabel>}
-          meta={<TechLabel tone="muted">Profile</TechLabel>}
+        <SectionHeading
+          id="about-title"
+          index="01"
+          label="About"
+          kanji="紹介"
+          meta="Profile"
+          title={
+            <>
+              Building where data, models and <em>software</em> meet.
+            </>
+          }
         />
-
-        <Reveal className="mt-12 md:mt-16">
-          <h2 id="about-title" className="type-display max-w-[15ch] text-balance uppercase">
-            Building where data, AI and software meet<span className="text-accent">.</span>
-          </h2>
-        </Reveal>
 
         <Grid className="mt-14 gap-y-10 md:mt-20 lg:mt-24">
           <Reveal className="md:col-span-6 lg:col-span-6">
-            <p className="type-subheading text-balance lg:text-[2rem] lg:leading-[1.2]">
+            <p className="type-subheading text-balance lg:text-[1.875rem] lg:leading-[1.25]">
               I&apos;m an AI &amp; Data Science engineering student. The part I care about most
               is the step after the model — turning data and code into systems people can
               actually use.
@@ -59,7 +60,7 @@ export function AboutSection() {
 
         <Grid className="mt-14 gap-y-12 md:mt-20 lg:mt-24">
           <Reveal className="md:col-span-6 lg:col-span-6">
-            <Frame caption={<TechLabel tone="muted">Fig. 04 — Profile</TechLabel>}>
+            <Frame caption={<TechLabel tone="muted">Fig. 02 — Profile</TechLabel>} className="[--frame-bg:var(--color-surface)]">
               <div className="pt-2">
                 <ProfileDiagram />
               </div>

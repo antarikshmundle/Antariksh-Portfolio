@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local AI agent skills (installed per machine, not part of the site)
+.agents/
+.claude/
+skills-lock.json

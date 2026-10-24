@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { Grid } from "@/components/layout/grid";
@@ -10,7 +9,9 @@ import { Divider } from "@/components/ui/divider";
 import { Frame } from "@/components/ui/frame";
 import { MetaRow } from "@/components/ui/meta-row";
 import { Status } from "@/components/ui/status";
+import { TagList } from "@/components/ui/tag-list";
 import { TechLabel } from "@/components/ui/tech-label";
+import { SignalSystem } from "@/components/sections/hero/signal-system";
 import { profile, routes, siteConfig } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -43,7 +44,7 @@ const focusAreas = [
 function ChapterHeader({ index, label, id, title }: { index: string; label: string; id: string; title: string }) {
   return (
     <>
-      <Divider weight="strong" label={<TechLabel index={index}>{label}</TechLabel>} />
+      <Divider weight="strong" label={<TechLabel index={index} className="text-accent">{label}</TechLabel>} />
       <h2 id={id} className="type-section mt-10 md:mt-12">
         {title}
       </h2>
@@ -53,24 +54,23 @@ function ChapterHeader({ index, label, id, title }: { index: string; label: stri
 
 export default function AboutPage() {
   return (
-    <main className="flex-1">
+    <main id="content" className="flex-1">
       {/* Header */}
       <header className="relative overflow-hidden">
         <div aria-hidden className="bg-grid grid-fade absolute inset-0" />
         <Container className="relative">
-          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-border/20 py-4">
-            <Link href={routes.home} aria-label={`${siteConfig.name} — home`}>
-              <TechLabel tone="inverse">AM / Portfolio</TechLabel>
-            </Link>
-            <TechLabel tone="muted">{siteConfig.location}</TechLabel>
-          </div>
-
           <Grid className="gap-y-8 pt-16 pb-16 md:pt-24 md:pb-20 lg:items-end lg:pt-28">
             <div className="md:col-span-6 lg:col-span-8">
-              <TechLabel tone="marked">{siteConfig.name}</TechLabel>
-              <h1 className="type-display mt-6 uppercase">About</h1>
+              <TechLabel tone="marked" className="enter text-accent">
+                About · {siteConfig.name}
+              </TechLabel>
+              <h1 className="enter type-display mt-6 max-w-[12ch] text-balance [--enter-delay:0.08s]">
+                A little more <em>context.</em>
+              </h1>
             </div>
-            <p className="type-subheading md:col-span-4 lg:col-span-4 lg:pb-3">A little more context.</p>
+            <p className="enter type-body-lg text-muted-foreground md:col-span-5 lg:col-span-4 lg:pb-3 [--enter-delay:0.16s]">
+              Who I am, how I work, and what I&apos;m focused on while finishing my degree.
+            </p>
           </Grid>
         </Container>
       </header>
@@ -81,7 +81,7 @@ export default function AboutPage() {
           <ChapterHeader index="01" label="Profile" id="intro-title" title="Introduction" />
           <Grid className="mt-10 gap-y-10 md:mt-14">
             <Reveal className="flex flex-col gap-6 md:col-span-6 lg:col-span-7">
-              <p className="type-subheading text-balance lg:text-[2rem] lg:leading-[1.2]">
+              <p className="type-subheading text-balance lg:text-[1.875rem] lg:leading-[1.25]">
                 I&apos;m {siteConfig.name}, an {profile.discipline} engineering student based in{" "}
                 {profile.location}. I&apos;m most interested in what happens after
                 a model works: making it part of something people can use.
@@ -114,14 +114,19 @@ export default function AboutPage() {
           <ol className="mt-10 grid gap-gutter md:mt-14 lg:grid-cols-3">
             {principles.map(({ title, text }, i) => (
               <li key={title}>
-                <Reveal delay={i * 0.08} className="flex h-full flex-col gap-4 border-t-2 pt-6">
-                  <TechLabel tone="muted">{String(i + 1).padStart(2, "0")}</TechLabel>
+                <Reveal delay={i * 0.08} className="flex h-full flex-col gap-4 border-t border-border/40 pt-6">
+                  <TechLabel className="text-accent">{String(i + 1).padStart(2, "0")}</TechLabel>
                   <h3 className="type-subheading">{title}</h3>
                   <p className="type-body text-muted-foreground">{text}</p>
                 </Reveal>
               </li>
             ))}
           </ol>
+          <Reveal className="mt-14 md:mt-20">
+            <Frame caption={<TechLabel tone="muted">Fig. 01 — Data to product</TechLabel>}>
+              <SignalSystem />
+            </Frame>
+          </Reveal>
         </Container>
       </Section>
 
@@ -141,13 +146,7 @@ export default function AboutPage() {
             </ol>
             <Reveal className="md:col-span-6 lg:col-span-3 lg:col-start-10">
               <TechLabel tone="muted">Working across</TechLabel>
-              <ul className="mt-4 flex flex-wrap gap-2">
-                {profile.areas.map((area) => (
-                  <li key={area}>
-                    <TechLabel tone="boxed">{area}</TechLabel>
-                  </li>
-                ))}
-              </ul>
+              <TagList className="mt-4" label="Areas" items={profile.areas} />
             </Reveal>
           </Grid>
         </Container>
@@ -158,7 +157,7 @@ export default function AboutPage() {
         <Container>
           <ChapterHeader index="04" label="Education" id="education-title" title="Education" />
           <Reveal className="mt-10 md:mt-14">
-            <Frame caption={<TechLabel tone="muted">Timeline · Preview</TechLabel>}>
+            <Frame caption={<TechLabel tone="muted">Degree</TechLabel>}>
               <Grid className="gap-y-8 pt-2">
                 <div className="flex flex-col gap-3 md:col-span-6 lg:col-span-7">
                   <h3 className="type-subheading">{profile.degree}</h3>
@@ -194,7 +193,9 @@ export default function AboutPage() {
         <Container>
           <Divider weight="strong" />
           <div className="mt-10 flex flex-col items-start gap-8 md:mt-14 md:flex-row md:items-end md:justify-between">
-            <p className="type-section max-w-xl text-balance">The work says the rest.</p>
+            <p className="type-section max-w-xl text-balance">
+              The work says <em>the rest.</em>
+            </p>
             <ButtonLink href={routes.work} icon={<ArrowRight className="size-4" strokeWidth={1.75} />}>
               See what I&apos;ve been building
             </ButtonLink>
