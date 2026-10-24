@@ -9,11 +9,11 @@ const baseStyles =
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "h-12 rounded-sharp bg-foreground px-6 text-background hover:shadow-[3px_3px_0_0_var(--color-accent)] motion-safe:hover:-translate-x-0.5 motion-safe:hover:-translate-y-0.5 active:shadow-none motion-safe:active:translate-x-0 motion-safe:active:translate-y-0",
+    "h-12 rounded-sharp bg-accent px-6 text-accent-foreground hover:bg-foreground active:bg-foreground/85",
   secondary:
-    "h-12 rounded-sharp border border-border bg-transparent px-6 text-foreground hover:bg-surface active:bg-foreground/10",
+    "h-12 rounded-sharp border border-border/40 bg-transparent px-6 text-foreground hover:border-foreground hover:bg-surface-raised active:bg-surface",
   minimal:
-    "h-auto px-0 py-1 text-foreground decoration-accent decoration-2 underline-offset-[6px] hover:underline",
+    "h-auto px-0 py-1 text-foreground decoration-accent decoration-1 underline-offset-[6px] hover:underline",
 };
 
 /** Class list for a button variant — reuse it to style links as buttons. */

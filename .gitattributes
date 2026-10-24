@@ -1,0 +1,5 @@
+# Vendored ThreeUI KageLandingPage files must stay byte-exact: each one is
+# pinned to a registered SHA-256 (see src/shaders/threeui-kage.manifest.json).
+# -text disables end-of-line conversion (core.autocrlf) for these paths.
+/public/landing-pages/** -text
+/src/shaders/** -text

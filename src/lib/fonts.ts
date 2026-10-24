@@ -1,9 +1,18 @@
-import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Inter, Instrument_Serif, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 
 /** Display — headings and large editorial type. */
 const displayFont = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
+  display: "swap",
+});
+
+/** Editorial — italic emphasis inside headings. Used sparingly. */
+const serifFont = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-instrument-serif",
   display: "swap",
 });
 
@@ -23,6 +32,7 @@ const monoFont = JetBrains_Mono({
 
 export const fontVariables = [
   displayFont.variable,
+  serifFont.variable,
   bodyFont.variable,
   monoFont.variable,
 ].join(" ");

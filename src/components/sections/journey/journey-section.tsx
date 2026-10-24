@@ -1,35 +1,39 @@
 import { Container } from "@/components/layout/container";
 import { Grid } from "@/components/layout/grid";
 import { Section } from "@/components/layout/section";
+import { SectionHeading } from "@/components/layout/section-heading";
 import { Reveal } from "@/components/motion/reveal";
-import { Divider } from "@/components/ui/divider";
-import { TechLabel } from "@/components/ui/tech-label";
 import { journeyItems } from "@/data/journey";
 import { JourneyRecord } from "./journey-record";
 import { JourneyTimeline } from "./journey-timeline";
 
 export function JourneySection() {
   return (
-    <Section id="journey" aria-labelledby="journey-title" className="scroll-mt-4">
+    <Section id="journey" aria-labelledby="journey-title" className="bg-surface">
       <Container>
-        <Divider
-          weight="strong"
-          label={<TechLabel index="05">Journey</TechLabel>}
-          meta={<TechLabel tone="muted">{String(journeyItems.length).padStart(2, "0")} stages</TechLabel>}
+        <SectionHeading
+          id="journey-title"
+          index="04"
+          label="Experience"
+          kanji="経歴"
+          meta={`${String(journeyItems.length).padStart(2, "0")} stages`}
+          title={
+            <>
+              The work behind the <em>work.</em>
+            </>
+          }
+          intro="The education, communities, competitions and projects that the portfolio grew out of."
         />
 
-        <Grid className="mt-12 gap-y-14 md:mt-16">
+        <Grid className="mt-16 gap-y-14 md:mt-20">
           {/* Short enough to stay fully in view while the timeline scrolls past */}
-          <Reveal className="md:col-span-6 lg:sticky lg:top-10 lg:col-span-5 lg:self-start">
-            <h2 id="journey-title" className="type-display text-balance uppercase">
-              The work behind the work
-            </h2>
-            <p className="type-body-lg mt-6 max-w-sm text-muted-foreground">
-              The education, communities, competitions and projects that the portfolio grew out of.
+          <Reveal className="hidden lg:sticky lg:top-[calc(var(--header-height)+2.5rem)] lg:col-span-4 lg:block lg:self-start">
+            <p className="font-serif text-3xl leading-tight text-balance italic">
+              Still early in the journey. The direction is clearer than the destination.
             </p>
           </Reveal>
 
-          <div className="md:col-span-6 lg:col-span-7 lg:pt-4">
+          <div className="md:col-span-6 lg:col-span-7 lg:col-start-6">
             <JourneyTimeline />
           </div>
         </Grid>
@@ -38,13 +42,11 @@ export function JourneySection() {
           <JourneyRecord />
         </section>
 
-        <Grid className="mt-16 md:mt-20">
-          <Reveal className="border-t-2 pt-8 md:col-span-6 lg:col-span-7 lg:col-start-6">
-            <p className="type-subheading max-w-xl text-balance">
-              Still early in the journey. The direction is clearer than the destination.
-            </p>
-          </Reveal>
-        </Grid>
+        <Reveal className="mt-16 border-t border-border/20 pt-8 lg:hidden">
+          <p className="font-serif text-2xl leading-snug text-balance italic">
+            Still early in the journey. The direction is clearer than the destination.
+          </p>
+        </Reveal>
       </Container>
     </Section>
   );

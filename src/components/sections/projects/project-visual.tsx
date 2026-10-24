@@ -10,15 +10,18 @@ import styles from "./project-visual.module.css";
  * variant adapts to the tone; the accent marks the key path.
  */
 
+/*
+ * inverse is a warm-paper plate: the accent is locally darkened so the
+ * red key path keeps its contrast on the light ground.
+ */
 const toneStyles: Record<ProjectVisualTone, string> = {
   surface: "bg-surface text-foreground [--visual-bg:var(--color-surface)]",
-  inverse: "bg-foreground text-background [--visual-bg:var(--color-foreground)]",
-  outline: "border border-border bg-background text-foreground [--visual-bg:var(--color-background)]",
+  inverse: "bg-foreground text-background [--visual-bg:var(--color-foreground)] [--accent:var(--moon)]",
+  outline: "border border-border/20 bg-background text-foreground [--visual-bg:var(--color-background)]",
 };
 
 const captions: Record<ProjectVisualType, string> = {
   campus: "Routing",
-  field: "Field signal",
   inference: "Inference",
   records: "Records",
   sensor: "Sensing",
@@ -120,91 +123,6 @@ function CampusDiagram() {
       {Array.from({ length: 10 }, (_, i) => (
         <line key={i} x1={14} y1={40 + i * 36} x2={i % 3 === 0 ? 26 : 20} y2={40 + i * 36} stroke="currentColor" strokeOpacity={0.5} {...line} />
       ))}
-    </svg>
-  );
-}
-
-function FieldDiagram() {
-  const points = Array.from({ length: 29 }, (_, i) => {
-    const y = 95 - 28 * Math.sin(i * 0.42) - 10 * Math.sin(i * 1.3 + 1);
-    return [40 + i * 20, Math.round(y)] as const;
-  });
-  const peak = points.reduce((best, p, i) => (p[1] < points[best][1] ? i : best), 0);
-  const signal = points.map(([x, y]) => `${x},${y}`).join(" ");
-
-  const parcelCols = [
-    [40, 170],
-    [180, 310],
-    [320, 450],
-    [460, 600],
-  ];
-  const parcelRows = [
-    [196, 278],
-    [288, 370],
-  ];
-  const highlighted = 5;
-  const [peakX, peakY] = points[peak];
-
-  return (
-    <svg viewBox="0 0 640 400" className="h-full w-full">
-      {/* Environmental signal */}
-      <line x1={40} y1={150} x2={600} y2={150} stroke="currentColor" strokeOpacity={0.4} {...line} />
-      <polygon points={`40,150 ${signal} 600,150`} fill="currentColor" fillOpacity={0.06} />
-      <polyline points={signal} fill="none" stroke="currentColor" strokeOpacity={0.85} strokeWidth={1.5} {...line} />
-      {points.map(([x, y], i) =>
-        i % 4 === 0 ? <rect key={x} x={x - 2.5} y={y - 2.5} width={5} height={5} fill="currentColor" /> : null,
-      )}
-      <rect x={peakX - 4} y={peakY - 4} width={8} height={8} className="fill-accent" />
-
-      {/* Link from the reading down to the field it describes */}
-      <path
-        d={`M${peakX} ${peakY + 8} V${parcelRows[1][0] - 4}`}
-        fill="none"
-        className={cn("stroke-accent", styles.flow)}
-        strokeWidth={1.5}
-        {...line}
-      />
-
-      {/* Parcels: crop rows with varying density */}
-      {parcelRows.flatMap(([y1, y2], r) =>
-        parcelCols.map(([x1, x2], c) => {
-          const index = r * 4 + c;
-          const density = 0.3 + noise(c + 3, r + 7) * 0.6;
-          const dots = [];
-          for (let y = y1 + 12; y < y2 - 6; y += 12) {
-            for (let x = x1 + 12; x < x2 - 6; x += 10) {
-              if (noise(x, y) < density) dots.push(<rect key={`${x}-${y}`} x={x - 1.5} y={y - 1.5} width={3} height={3} />);
-            }
-          }
-          return (
-            <g key={index}>
-              <rect
-                x={x1}
-                y={y1}
-                width={x2 - x1}
-                height={y2 - y1}
-                fill="none"
-                stroke="currentColor"
-                strokeOpacity={index === highlighted ? 0 : 0.3}
-                {...line}
-              />
-              <g fill="currentColor" fillOpacity={0.6}>
-                {dots}
-              </g>
-            </g>
-          );
-        }),
-      )}
-      <rect
-        x={parcelCols[1][0]}
-        y={parcelRows[1][0]}
-        width={130}
-        height={82}
-        fill="none"
-        className="stroke-accent"
-        strokeWidth={1.5}
-        {...line}
-      />
     </svg>
   );
 }
@@ -452,7 +370,6 @@ function SensorDiagram() {
 
 const diagrams: Record<ProjectVisualType, ComponentType> = {
   campus: CampusDiagram,
-  field: FieldDiagram,
   inference: InferenceDiagram,
   records: RecordsDiagram,
   sensor: SensorDiagram,
@@ -462,23 +379,30 @@ type ProjectVisualProps = {
   type: ProjectVisualType;
   tone: ProjectVisualTone;
   number: string;
+  /** Thumbnail mode: tighter padding and no caption strip. */
+  compact?: boolean;
   className?: string;
 };
 
-export function ProjectVisual({ type, tone, number, className }: ProjectVisualProps) {
+export function ProjectVisual({ type, tone, number, compact = false, className }: ProjectVisualProps) {
   const Diagram = diagrams[type];
 
   return (
     <div aria-hidden className={cn("relative overflow-hidden", toneStyles[tone], className)}>
       {tone !== "inverse" && <div className="bg-grid absolute inset-0" />}
-      <div className="absolute inset-0 p-5 pt-12 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:group-hover:scale-[1.03] md:p-12 md:pt-16">
+      <div
+        className={cn(
+          "absolute inset-0 transition-transform duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:group-hover:scale-[1.03]",
+          compact ? "p-3" : "p-5 pt-12 md:p-12 md:pt-16",
+        )}
+      >
         <Diagram />
       </div>
-      <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-4 p-4 md:p-5">
-        <TechLabel className="opacity-70">
+      <div className={cn("absolute inset-x-0 top-0 flex items-center justify-between gap-4 p-4 md:p-5", compact && "hidden")}>
+        <TechLabel className="opacity-75">
           Fig. {number} — Concept · {captions[type]}
         </TechLabel>
-        <TechLabel className="opacity-70">N° {number}</TechLabel>
+        <TechLabel className="opacity-75">N° {number}</TechLabel>
       </div>
     </div>
   );

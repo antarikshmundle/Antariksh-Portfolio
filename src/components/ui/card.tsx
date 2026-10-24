@@ -5,8 +5,8 @@ export type CardVariant = "surface" | "outline" | "inverse";
 
 const variantStyles: Record<CardVariant, string> = {
   surface: "bg-surface",
-  outline: "border border-border bg-background",
-  inverse: "bg-foreground text-background",
+  outline: "border border-border/25 bg-background",
+  inverse: "bg-surface-raised text-foreground",
 };
 
 type CardProps = ComponentPropsWithoutRef<"div"> & {

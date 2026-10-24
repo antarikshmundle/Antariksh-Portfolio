@@ -6,8 +6,8 @@ export type TechLabelTone = "plain" | "muted" | "boxed" | "inverse" | "marked";
 const toneStyles: Record<TechLabelTone, string> = {
   plain: "",
   muted: "text-muted-foreground",
-  boxed: "border border-current/80 px-2 py-1.5",
-  inverse: "bg-foreground px-2 py-1.5 text-background",
+  boxed: "border border-border/35 px-2 py-1.5 text-muted-foreground",
+  inverse: "bg-accent px-2 py-1.5 text-accent-foreground",
   marked: "",
 };
 

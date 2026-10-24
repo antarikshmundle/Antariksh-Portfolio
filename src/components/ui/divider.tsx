@@ -4,9 +4,9 @@ import { cn } from "@/lib/cn";
 export type DividerWeight = "hairline" | "default" | "strong";
 
 const weightStyles: Record<DividerWeight, string> = {
-  hairline: "h-px bg-border/20",
-  default: "h-px bg-border",
-  strong: "h-0.5 bg-border",
+  hairline: "h-px bg-border/15",
+  default: "h-px bg-border/30",
+  strong: "h-px bg-border/60",
 };
 
 type DividerProps = {

@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/motion/reveal";
+import { TagList } from "@/components/ui/tag-list";
 import { TechLabel } from "@/components/ui/tech-label";
 import { coursework, journeyRecord } from "@/data/journey";
 
@@ -7,7 +8,7 @@ export function JourneyRecord() {
   return (
     <div>
       <div className="flex flex-wrap items-baseline justify-between gap-4">
-        <h3 id="journey-record" className="type-subheading uppercase">
+        <h3 id="journey-record" className="type-subheading">
           The record
         </h3>
         <TechLabel tone="muted">At a glance</TechLabel>
@@ -15,7 +16,7 @@ export function JourneyRecord() {
 
       <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-10 md:gap-x-gutter lg:grid-cols-3">
         {journeyRecord.map((group, i) => (
-          <Reveal key={group.label} delay={(i % 3) * 0.06} className="border-t-2 pt-5">
+          <Reveal key={group.label} delay={(i % 3) * 0.06} className="border-t border-border/40 pt-5">
             <h4>
               <TechLabel index={String(i + 1).padStart(2, "0")}>{group.label}</TechLabel>
             </h4>
@@ -34,17 +35,11 @@ export function JourneyRecord() {
         ))}
       </div>
 
-      <Reveal className="mt-10 border-t-2 pt-5">
+      <Reveal className="mt-10 border-t border-border/40 pt-5">
         <h4>
           <TechLabel index={String(journeyRecord.length + 1).padStart(2, "0")}>Relevant coursework</TechLabel>
         </h4>
-        <ul className="mt-4 flex flex-wrap gap-2">
-          {coursework.map((course) => (
-            <li key={course}>
-              <TechLabel tone="boxed">{course}</TechLabel>
-            </li>
-          ))}
-        </ul>
+        <TagList className="mt-4" label="Relevant coursework" items={coursework} />
       </Reveal>
     </div>
   );

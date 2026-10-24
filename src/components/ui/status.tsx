@@ -4,7 +4,7 @@ export type StatusTone = "active" | "idle" | "offline";
 
 const dotStyles: Record<StatusTone, string> = {
   active: "bg-accent ring-4 ring-accent/20",
-  idle: "bg-foreground",
+  idle: "bg-muted-foreground",
   offline: "border border-muted-foreground",
 };
 

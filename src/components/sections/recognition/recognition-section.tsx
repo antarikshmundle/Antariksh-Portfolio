@@ -1,8 +1,8 @@
 import { Container } from "@/components/layout/container";
 import { Grid } from "@/components/layout/grid";
 import { Section } from "@/components/layout/section";
+import { SectionHeading } from "@/components/layout/section-heading";
 import { Reveal } from "@/components/motion/reveal";
-import { Divider } from "@/components/ui/divider";
 import { MetaRow } from "@/components/ui/meta-row";
 import { TechLabel, type TechLabelTone } from "@/components/ui/tech-label";
 import { achievements, type Achievement, type AchievementType } from "@/data/achievements";
@@ -16,20 +16,19 @@ const treatments: Record<
   AchievementType,
   { label: string; plural: string; tone: TechLabelTone; rule: string; title: string }
 > = {
-  win: { label: "Win", plural: "Wins", tone: "inverse", rule: "border-t-2", title: "type-section" },
-  badge: { label: "Badge", plural: "Badges", tone: "boxed", rule: "border-t", title: "type-section" },
+  win: { label: "Win", plural: "Wins", tone: "inverse", rule: "border-t border-border/50", title: "type-section" },
+  badge: { label: "Badge", plural: "Badges", tone: "boxed", rule: "border-t border-border/30", title: "type-section" },
   participation: {
     label: "Participation",
     plural: "Participation",
     tone: "muted",
-    rule: "border-t border-border/30",
+    rule: "border-t border-border/20",
     title: "type-subheading",
   },
 };
 
 function AchievementRow({ achievement }: { achievement: Achievement }) {
   const t = treatments[achievement.type];
-  const isWin = achievement.type === "win";
 
   return (
     <article
@@ -43,7 +42,6 @@ function AchievementRow({ achievement }: { achievement: Achievement }) {
       </TechLabel>
       <div>
         <div className="flex flex-wrap items-center gap-3">
-          {isWin && <span aria-hidden="true" className="size-2 bg-accent" />}
           <TechLabel tone={t.tone}>{t.label}</TechLabel>
           {achievement.organization && <TechLabel tone="muted">{achievement.organization}</TechLabel>}
         </div>
@@ -64,26 +62,30 @@ export function RecognitionSection() {
     .map(({ type, count }) => ({ label: treatments[type].plural, value: String(count).padStart(2, "0") }));
 
   return (
-    <Section id="recognition" aria-labelledby="recognition-title" className="scroll-mt-4">
+    <Section id="recognition" aria-labelledby="recognition-title" className="bg-surface">
       <Container>
-        <Divider
-          weight="strong"
-          label={<TechLabel index="07">Recognition</TechLabel>}
-          meta={<TechLabel tone="muted">Documented</TechLabel>}
+        <SectionHeading
+          id="recognition-title"
+          index="06"
+          label="Achievements"
+          kanji="実績"
+          meta="Documented"
+          title={
+            <>
+              Worth <em>noting.</em>
+            </>
+          }
         />
 
-        <Grid className="mt-12 gap-y-14 md:mt-16">
-          <Reveal className="md:col-span-6 lg:col-span-5">
-            <h2 id="recognition-title" className="type-display uppercase">
-              Worth noting
-            </h2>
-            <p className="type-body-lg mt-6 max-w-sm text-muted-foreground">
+        <Grid className="mt-16 gap-y-14 md:mt-20">
+          <Reveal className="md:col-span-6 lg:col-span-4">
+            <p className="type-body-lg max-w-sm text-muted-foreground">
               Documented wins, a Google Cloud badge and the competitions around them — in brief.
             </p>
             <MetaRow className="mt-10" items={summary} />
           </Reveal>
 
-          <ol className="border-b border-border/30 md:col-span-6 lg:col-span-7">
+          <ol className="border-b border-border/20 md:col-span-6 lg:col-span-7 lg:col-start-6">
             {achievements.map((achievement, i) => (
               <li key={achievement.number}>
                 <Reveal delay={i * 0.06}>

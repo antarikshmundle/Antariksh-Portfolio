@@ -1,62 +1,52 @@
-import { ActionArrow } from "@/components/ui/action-arrow";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { TechLabel } from "@/components/ui/tech-label";
 import type { SocialLink as SocialLinkData } from "@/data/socials";
-import { cn } from "@/lib/cn";
 
 type SocialLinkProps = {
   link: SocialLinkData;
   number: string;
 };
 
-function RowContent({ link, number, pending }: SocialLinkProps & { pending?: boolean }) {
-  return (
-    <>
-      <TechLabel tone="muted" aria-hidden="true" className="self-start pt-3 md:pt-4">
-        {number}
-      </TechLabel>
-      <span
-        className={cn(
-          "flex min-w-0 flex-col gap-2 transition-transform duration-300 ease-out",
-          !pending && "motion-safe:group-hover:translate-x-2 motion-safe:group-focus-visible:translate-x-2",
-        )}
-      >
-        <span className="type-section uppercase">{link.label}</span>
-        <span className="type-body text-muted-foreground">{link.description}</span>
-        {link.display && <span className="font-mono text-xs break-all text-muted-foreground">{link.display}</span>}
-        {pending && <TechLabel tone="boxed" className="mt-1 self-start">Link to be added</TechLabel>}
-      </span>
-    </>
-  );
-}
+const cellStyles = "flex h-full min-h-32 flex-col justify-between gap-6 p-5 md:p-6";
 
-/** One row of the Elsewhere list: a full-width link, or a pending entry. */
+/** One cell of the Elsewhere grid: a link, or a clearly-marked pending entry. */
 export function SocialLink({ link, number }: SocialLinkProps) {
-  const rowStyles =
-    "grid grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-x-4 border-t-2 py-6 md:grid-cols-[4rem_minmax(0,1fr)_auto] md:gap-x-6 md:py-8";
-
   if (!link.href) {
     return (
-      <div className={rowStyles}>
-        <RowContent link={link} number={number} pending />
+      <div className={cellStyles}>
+        <TechLabel tone="muted">{number}</TechLabel>
+        <span className="flex flex-col gap-1">
+          <span className="type-subheading text-muted-foreground">{link.label}</span>
+          <TechLabel tone="muted">Link to be added</TechLabel>
+        </span>
       </div>
     );
   }
 
   const external = link.external === true;
+  const Icon = external ? ArrowUpRight : ArrowRight;
 
   return (
     <a
       href={link.href}
       {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
-      className={cn(
-        rowStyles,
-        "group relative outline-offset-4",
-        // Accent rule draws across the top edge on hover / keyboard focus.
-        "before:absolute before:inset-x-0 before:-top-0.5 before:h-0.5 before:origin-left before:scale-x-0 before:bg-accent before:transition-transform before:duration-300 hover:before:scale-x-100 focus-visible:before:scale-x-100 motion-reduce:before:transition-none",
-      )}
+      className={`group ${cellStyles} -outline-offset-2 transition-colors duration-300 hover:bg-surface-raised`}
     >
-      <RowContent link={link} number={number} />
-      <ActionArrow direction={external ? "up-right" : "right"} />
+      <span className="flex items-center justify-between">
+        <TechLabel tone="muted" aria-hidden="true" className="group-hover:text-accent">
+          {number}
+        </TechLabel>
+        <Icon
+          aria-hidden="true"
+          className="size-4 text-muted-foreground transition-[translate,color] duration-300 group-hover:text-accent motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5"
+          strokeWidth={1.75}
+        />
+      </span>
+      <span className="flex flex-col gap-1">
+        <span className="type-subheading">{link.label}</span>
+        <span className="type-meta text-muted-foreground">{link.description}</span>
+        {link.display && <span className="font-mono text-xs break-all text-muted-foreground">{link.display}</span>}
+      </span>
       {external && <span className="sr-only"> (opens in a new tab)</span>}
     </a>
   );

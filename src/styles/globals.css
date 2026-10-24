@@ -5,36 +5,45 @@
  * Edit values here; components consume them only through the
  * Tailwind theme below (bg-background, text-accent, px-gutter, ...).
  *
- * Contrast (WCAG): foreground and muted-foreground pass AA for body text on
- * both background and surface. Accent is ~3.5:1 — use it for large type,
- * borders, markers and focus rings, never for small running text.
+ * Contrast (WCAG, measured on --background):
+ *   foreground ~16:1 · muted-foreground ~6.5:1 · accent ~5.5:1 (5.2:1 on surface).
+ * The vermilion accent — the red moon — passes AA for small text but stays
+ * rare: markers, key numbers, active states, focus rings and primary actions.
  */
 :root {
-  --background: #f3eee4;
-  --foreground: #161412;
-  --muted-foreground: #625b52;
-  --border: #2a2622;
-  --accent: #d9503a;
-  --surface: #ebe4d6;
+  color-scheme: dark;
+
+  --background: #0c0d0e;
+  --foreground: #f1ece3;
+  --muted-foreground: #98948b;
+  --border: #8f8b84;
+  --accent: #f2503f;
+  --accent-foreground: #160605;
+  /* Deep moon red for large fills (the hero moon, paper-plate figures). */
+  --moon: #b3261e;
+  --surface: #141618;
+  --surface-raised: #1b1e21;
 
   /* Layout rhythm — responsive values change here, not in components. */
   --gutter: 1rem;
-  --section-space: 4.5rem;
+  --section-space: 5rem;
   --grid-size: 2rem;
+  --header-height: 3.5rem;
 }
 
 @media (width >= 48rem) {
   :root {
     --gutter: 1.5rem;
-    --section-space: 6rem;
+    --section-space: 7rem;
   }
 }
 
 @media (width >= 64rem) {
   :root {
     --gutter: 2.5rem;
-    --section-space: 8rem;
+    --section-space: 9rem;
     --grid-size: 3rem;
+    --header-height: 4rem;
   }
 }
 
@@ -44,16 +53,21 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-moon: var(--moon);
   --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
 
   /* Font variables are injected by next/font in src/lib/fonts.ts */
   --font-display: var(--font-space-grotesk);
+  --font-serif: var(--font-instrument-serif);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
 
   --spacing-gutter: var(--gutter);
   --spacing-section: var(--section-space);
-  --container-content: 80rem;
+  --spacing-header: var(--header-height);
+  --container-content: 82rem;
 
   --radius-sharp: 2px;
 }
@@ -63,13 +77,17 @@
   *,
   ::before,
   ::after {
-    border-color: var(--color-border);
+    border-color: color-mix(in oklab, var(--color-border) 22%, transparent);
   }
 
   @media (prefers-reduced-motion: no-preference) {
     html {
       scroll-behavior: smooth;
     }
+  }
+
+  html {
+    background-color: var(--color-background);
   }
 
   body {
@@ -88,33 +106,34 @@
 
   ::selection {
     background-color: var(--color-accent);
-    color: var(--color-foreground);
+    color: var(--color-accent-foreground);
   }
 }
 
 /*
  * Typography scale. Colour is intentionally left out so each style
- * composes with any text-* token.
+ * composes with any text-* token. Headings are sentence case; emphasis
+ * inside a heading uses <em> (rendered by type-em below).
  */
 @utility type-display {
   font-family: var(--font-display);
-  font-size: clamp(2.75rem, 7.5vw + 0.5rem, 8.5rem);
-  font-weight: 600;
-  line-height: 0.92;
+  font-size: clamp(2.75rem, 5.6vw + 0.75rem, 7rem);
+  font-weight: 500;
+  line-height: 0.96;
   letter-spacing: -0.045em;
 }
 
 @utility type-section {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 3.5vw + 1rem, 4rem);
+  font-size: clamp(2rem, 2.8vw + 1rem, 3.75rem);
   font-weight: 500;
-  line-height: 1;
+  line-height: 1.02;
   letter-spacing: -0.035em;
 }
 
 @utility type-subheading {
   font-family: var(--font-display);
-  font-size: clamp(1.25rem, 0.75vw + 1rem, 1.625rem);
+  font-size: clamp(1.25rem, 0.6vw + 1rem, 1.5rem);
   font-weight: 500;
   line-height: 1.25;
   letter-spacing: -0.015em;
@@ -123,37 +142,57 @@
 @utility type-body {
   font-family: var(--font-sans);
   font-size: 1rem;
-  line-height: 1.65;
+  line-height: 1.7;
 }
 
 @utility type-body-lg {
   font-family: var(--font-sans);
-  font-size: clamp(1.0625rem, 0.4vw + 1rem, 1.25rem);
+  font-size: clamp(1.0625rem, 0.35vw + 1rem, 1.25rem);
   line-height: 1.6;
 }
 
 @utility type-meta {
   font-family: var(--font-sans);
   font-size: 0.8125rem;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 @utility type-label {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 500;
-  line-height: 1;
+  line-height: 1.2;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 @utility type-stat {
   font-family: var(--font-display);
-  font-size: clamp(3.5rem, 6vw + 1rem, 7rem);
+  font-size: clamp(2.5rem, 3.5vw + 1rem, 4.5rem);
   font-weight: 500;
-  line-height: 0.85;
+  line-height: 0.9;
   letter-spacing: -0.05em;
   font-variant-numeric: tabular-nums;
+}
+
+/* Serif italic emphasis inside sans display type — the editorial voice. */
+@utility type-em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  font-size: 1.08em;
+}
+
+/* Any <em> inside a heading picks up the editorial serif automatically. */
+@layer components {
+  :is(h1, h2, h3, .type-display, .type-section) em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    font-size: 1.08em;
+  }
 }
 
 /* Structural grid texture: hairlines derived from the border token. */
@@ -161,12 +200,12 @@
   background-image:
     linear-gradient(
       to right,
-      color-mix(in oklab, var(--color-border) 9%, transparent) 1px,
+      color-mix(in oklab, var(--color-border) 7%, transparent) 1px,
       transparent 1px
     ),
     linear-gradient(
       to bottom,
-      color-mix(in oklab, var(--color-border) 9%, transparent) 1px,
+      color-mix(in oklab, var(--color-border) 7%, transparent) 1px,
       transparent 1px
     );
   background-size: var(--grid-size) var(--grid-size);
@@ -175,4 +214,23 @@
 /* Fades the grid out toward the bottom so it never competes with content. */
 @utility grid-fade {
   mask-image: linear-gradient(to bottom, black 30%, transparent);
+}
+
+/*
+ * Shared entrance for secondary above-the-fold content. CSS-only, so it never
+ * waits on JS. Kept short and small; key content (a page's main heading and
+ * hero image) should render without it.
+ */
+@utility enter {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: enter 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--enter-delay, 0s);
+  }
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }

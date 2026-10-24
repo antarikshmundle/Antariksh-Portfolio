@@ -83,7 +83,7 @@ export function MotionDemos() {
             <TechLabel tone="muted">Case study</TechLabel>
             <ActionArrow />
           </div>
-          <p className="type-subheading mt-8">Realtime anomaly detection</p>
+          <p className="type-subheading mt-8">Crop AI Analyzer</p>
         </motion.a>
       </DemoPanel>
 

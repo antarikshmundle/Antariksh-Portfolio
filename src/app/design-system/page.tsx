@@ -39,13 +39,13 @@ const colorTokens = [
   {
     token: "background",
     swatchClassName: "bg-background",
-    usage: "Page canvas. Warm paper tone carries the whole palette.",
+    usage: "Page canvas. Near-black charcoal, slightly warm, never pure black.",
     contrastWith: "foreground",
   },
   {
     token: "foreground",
     swatchClassName: "bg-foreground",
-    usage: "Primary text, primary buttons and inverse surfaces.",
+    usage: "Primary text and headings. Warm white, also the ground of paper-plate figures.",
     contrastWith: "background",
   },
   {
@@ -57,19 +57,37 @@ const colorTokens = [
   {
     token: "border",
     swatchClassName: "bg-border",
-    usage: "Rules, frames and outlines. Use /20 opacity for hairlines.",
+    usage: "Rules, frames and outlines. Always used at reduced opacity (/15–/60).",
     contrastWith: "background",
   },
   {
     token: "accent",
     swatchClassName: "bg-accent",
-    usage: "Markers, focus rings, large numerals. Never small body text.",
+    usage: "Vermilion — the red moon: primary actions, markers, active states, focus rings. Used rarely.",
     contrastWith: "background",
+  },
+  {
+    token: "accent-foreground",
+    swatchClassName: "bg-accent-foreground",
+    usage: "Text and icons placed on an accent fill.",
+    contrastWith: "accent",
+  },
+  {
+    token: "moon",
+    swatchClassName: "bg-moon",
+    usage: "Deep moon red for large fills: the hero moon and paper-plate figures. Never text on the dark canvas.",
+    contrastWith: "foreground",
   },
   {
     token: "surface",
     swatchClassName: "bg-surface",
-    usage: "Recessed panels, figures and secondary cards.",
+    usage: "Alternating section bands, figures and the footer.",
+    contrastWith: "foreground",
+  },
+  {
+    token: "surface-raised",
+    swatchClassName: "bg-surface-raised",
+    usage: "Hover fills and raised cells on top of a surface.",
     contrastWith: "foreground",
   },
 ];
@@ -78,19 +96,23 @@ const typeScale = [
   {
     name: "Display",
     utility: "type-display",
-    spec: "Space Grotesk · 600 · 44–136px · -4.5%",
-    sample: <p className="type-display uppercase">Engineering, edited.</p>,
+    spec: "Space Grotesk · 500 · 44–112px · -4.5% · sentence case",
+    sample: (
+      <p className="type-display">
+        Engineering, <em>edited.</em>
+      </p>
+    ),
   },
   {
     name: "Section heading",
     utility: "type-section",
-    spec: "Space Grotesk · 500 · 32–64px · -3.5%",
+    spec: "Space Grotesk · 500 · 32–60px · -3.5%",
     sample: <p className="type-section">Selected work</p>,
   },
   {
     name: "Subheading",
     utility: "type-subheading",
-    spec: "Space Grotesk · 500 · 20–26px",
+    spec: "Space Grotesk · 500 · 20–24px",
     sample: (
       <p className="type-subheading max-w-2xl">
         Designing reliable systems for messy, real-world data.
@@ -112,6 +134,16 @@ const typeScale = [
           text keeps AA contrast on both background and surface.
         </p>
       </div>
+    ),
+  },
+  {
+    name: "Editorial emphasis",
+    utility: "<em> in headings / type-em",
+    spec: "Instrument Serif · italic · 400 · 1.08em",
+    sample: (
+      <p className="type-section">
+        Systems built end to <em>end.</em>
+      </p>
     ),
   },
   {
@@ -139,18 +171,18 @@ const typeScale = [
   {
     name: "Statistic",
     utility: "type-stat",
-    spec: "Space Grotesk · 500 · 56–112px · tabular",
+    spec: "Space Grotesk · 500 · 40–72px · tabular",
     sample: (
       <div className="flex flex-wrap gap-x-16 gap-y-8">
         <div>
           <p className="type-stat">
-            98.7<span className="text-accent">%</span>
+            95.8<span className="text-accent">%</span>
           </p>
-          <p className="type-label mt-4 text-muted-foreground">Model accuracy</p>
+          <p className="type-label mt-4 text-muted-foreground">Disease model test accuracy</p>
         </div>
         <div>
-          <p className="type-stat">12</p>
-          <p className="type-label mt-4 text-muted-foreground">Systems shipped</p>
+          <p className="type-stat">69</p>
+          <p className="type-label mt-4 text-muted-foreground">Campus places</p>
         </div>
       </div>
     ),
@@ -201,7 +233,7 @@ const spacingScale = [
 
 export default function DesignSystemPage() {
   return (
-    <main className="flex-1">
+    <main id="content" className="flex-1">
       {/* Masthead */}
       <header className="relative overflow-hidden">
         <div aria-hidden className="bg-grid grid-fade absolute inset-0" />
@@ -217,18 +249,18 @@ export default function DesignSystemPage() {
 
           <Grid className="gap-y-10 pt-16 pb-14 md:pt-24 lg:pt-32 lg:pb-20">
             <div className="md:col-span-6 lg:col-span-8">
-              <h1 className="type-display uppercase">
+              <h1 className="type-display">
                 Design
                 <br />
-                System
+                <em>system</em>
               </h1>
               <p className="type-subheading mt-6 md:mt-8">Antariksh Mundle Portfolio</p>
             </div>
             <div className="flex flex-col gap-6 md:col-span-4 lg:col-span-4 lg:self-end">
               <p className="type-body text-muted-foreground">
                 The working reference for the portfolio&apos;s visual language:
-                editorial typography, a structural grid, strong rules and a single
-                restrained accent. Every value on this page comes from the shared
+                editorial typography on a charcoal ground, a structural grid, quiet
+                rules and a single vermilion accent. Every value on this page comes from the shared
                 tokens and components.
               </p>
               <MetaRow

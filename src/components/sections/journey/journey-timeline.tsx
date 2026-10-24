@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/motion/reveal";
+import { TagList } from "@/components/ui/tag-list";
 import { TechLabel } from "@/components/ui/tech-label";
 import { journeyHorizon, journeyItems } from "@/data/journey";
 import { cn } from "@/lib/cn";
@@ -30,7 +31,7 @@ export function JourneyTimeline() {
               className={cn(
                 "absolute top-2 bottom-0 border-l",
                 spineX,
-                ahead ? "border-dashed border-border/50" : "border-border/40",
+                ahead ? "border-dashed border-border/40" : "border-border/30",
               )}
             />
             {/* Stage marker */}
@@ -39,10 +40,10 @@ export function JourneyTimeline() {
               className={cn(
                 "absolute top-0.5 flex size-[1.125rem] items-center justify-center border",
                 markerX,
-                isCurrent ? "border-accent bg-background" : "border-border bg-background",
+                isCurrent ? "border-accent bg-surface" : "border-border/50 bg-surface",
               )}
             >
-              <span className={cn("size-2", isCurrent ? "bg-accent" : "bg-foreground")} />
+              <span className={cn("size-2", isCurrent ? "bg-accent" : "bg-muted-foreground")} />
             </span>
 
             <Reveal delay={i * 0.06}>
@@ -54,26 +55,18 @@ export function JourneyTimeline() {
               <div className="mt-5 flex items-baseline gap-5 md:gap-6">
                 <span
                   className={cn(
-                    "type-section shrink-0",
-                    isCurrent ? "text-foreground" : "text-muted-foreground",
+                    "font-display text-3xl font-medium tracking-[-0.04em] shrink-0 md:text-4xl",
+                    isCurrent ? "text-accent" : "text-muted-foreground",
                   )}
                 >
                   {item.number}
                 </span>
-                <h3 className="type-subheading uppercase">{item.title}</h3>
+                <h3 className="type-subheading">{item.title}</h3>
               </div>
 
               <p className="type-body mt-4 max-w-xl text-muted-foreground">{item.description}</p>
 
-              {item.tags && (
-                <ul className="mt-5 flex flex-wrap gap-2" aria-label={`${item.title} tags`}>
-                  {item.tags.map((tag) => (
-                    <li key={tag}>
-                      <TechLabel tone="boxed">{tag}</TechLabel>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              {item.tags && <TagList className="mt-5" label={`${item.title} tags`} items={item.tags} />}
             </Reveal>
           </li>
         );
@@ -83,10 +76,10 @@ export function JourneyTimeline() {
       <li className="relative">
         <span
           aria-hidden
-          className={cn("absolute top-0.5 size-[1.125rem] border border-dashed border-border bg-background", markerX)}
+          className={cn("absolute top-0.5 size-[1.125rem] border border-dashed border-border/60 bg-surface", markerX)}
         />
         <Reveal className="flex flex-wrap items-baseline gap-x-5 gap-y-2">
-          <span className="type-section">{journeyHorizon.period}</span>
+          <span className="type-section text-muted-foreground">{journeyHorizon.period}</span>
           <TechLabel tone="muted">{journeyHorizon.label}</TechLabel>
         </Reveal>
       </li>

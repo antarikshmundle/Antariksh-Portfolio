@@ -6,18 +6,20 @@ import { navigation, siteConfig } from "@/data/site";
 import { socials } from "@/data/socials";
 
 const linkStyles =
-  "type-meta decoration-accent decoration-2 underline-offset-4 hover:underline";
+  "type-meta text-muted-foreground transition-colors decoration-accent underline-offset-4 hover:text-foreground hover:underline";
 
 /** Global footer — the final page boundary. Server-rendered, no JS needed. */
 export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-auto">
+    <footer className="mt-auto border-t border-border/20 bg-surface">
       <Container>
-        <div className="grid gap-x-gutter gap-y-12 border-t-2 pt-12 pb-10 md:grid-cols-6 md:pt-16 lg:grid-cols-12">
+        <div className="grid gap-x-gutter gap-y-12 pt-14 pb-12 md:grid-cols-6 md:pt-20 lg:grid-cols-12">
           <div className="md:col-span-6 lg:col-span-6">
-            <p className="type-section uppercase">{siteConfig.name}</p>
+            <p className="type-section">
+              {siteConfig.name.split(" ")[0]} <em className="font-serif font-normal italic">{siteConfig.name.split(" ").slice(1).join(" ")}</em>
+            </p>
             <p className="type-body mt-4 text-muted-foreground">
               {siteConfig.role}
               <br />
@@ -70,7 +72,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-4 border-t border-border/20 py-6">
+        <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-4 border-t border-border/15 py-6">
           <div className="flex flex-wrap gap-x-8 gap-y-2">
             <TechLabel tone="muted">
               © {year} {siteConfig.name}
@@ -78,7 +80,7 @@ export function SiteFooter() {
             <TechLabel tone="muted">Built with Next.js / TypeScript / Tailwind CSS</TechLabel>
           </div>
           {/* "#top" with no matching id scrolls to the document top (HTML spec) — no JS needed. */}
-          <a href="#top" className="type-label group inline-flex items-center gap-2">
+          <a href="#top" className="type-label group inline-flex items-center gap-2 text-muted-foreground hover:text-foreground">
             Back to top
             <ArrowUp
               aria-hidden="true"
